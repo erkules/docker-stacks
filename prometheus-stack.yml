@@ -1,0 +1,102 @@
+version: '3.1'
+services:
+  node:
+    deploy:
+      mode: global
+      restart_policy: 
+        condition: on-failure
+      resources:
+        reservations:
+          cpus:   '0.10'
+          memory: '16M'
+        limits:
+          cpus:   '0.10'
+          memory: '32M'
+    image: prom/node-exporter:latest
+    command: -collector.procfs /host/proc -collector.sysfs /host/sys --collector.textfile.directory /etc/node-exporter/ --collectors.enabled "conntrack,diskstats,entropy,filefd,filesystem,loadavg,mdadm,meminfo,netdev,netstat,stat,textfile,time,vmstat,ipvs" -collector.filesystem.ignored-mount-points '^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+    - /proc:/host/proc 
+    - /sys:/host/sys 
+    - /:/rootfs 
+    - /etc/hostname:/etc/host_hostname 
+    environment:
+    - HOST_HOSTNAME=/etc/host_hostname
+    networks:
+    - monitoring
+
+  cadvisor:
+    deploy:
+      mode: global
+      labels:
+      - label com.docker.stack.namespace=monitoring
+      restart_policy: 
+        condition: on-failure
+      resources:
+        reservations:
+          cpus:   '0.10'
+          memory: '64M'
+        limits:
+          cpus:   '0.10'
+          memory: '128M'
+    image: google/cadvisor
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run
+    - /sys:/sys:ro
+    - /var/lib/docker:/var/lib/docker:ro
+    networks:
+    - monitoring
+
+  prometheus:
+    image: prom/prometheus
+    command: -config.file=/run/secrets/prometheus -storage.local.path=/prometheus 
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+      - label com.docker.stack.namespace=monitoring
+      restart_policy: 
+        condition: on-failure
+      resources:
+        reservations:
+          cpus:   '0.10'
+          memory: '64M'
+        limits:
+          cpus:   '0.10'
+          memory: '128M'
+    networks:
+    - monitoring
+    ports:
+    - "9090:9090"
+    secrets:
+    - prometheus
+
+ 
+  grafana:
+    image: grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_PASSWORD:-admin}
+      PROMETHEUS_ENDPOINT: http://prometheus:9090
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 64M
+        reservations:
+          cpus: '0.50'
+          memory: 32M
+ 
+networks:
+  monitoring:
+    driver: overlay
+    
+
+secrets:
+  prometheus: 
+    external: true
