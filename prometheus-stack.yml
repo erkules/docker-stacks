@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.3'
 services:
   node:
     deploy:
@@ -48,8 +48,8 @@ services:
     - monitoring
 
   prometheus:
-    image: prom/prometheus:v.1.8.2
-    command: -config.file=/run/secrets/prometheus -storage.local.path=/prometheus 
+    image: prom/prometheus:v1.8.2
+    command: -config.file=/etc/prometheus.yml -storage.local.path=/prometheus 
     deploy:
       mode: replicated
       replicas: 1
@@ -68,8 +68,9 @@ services:
     - monitoring
     ports:
     - "9090:9090"
-    secrets:
-    - prometheus
+    configs:
+    - source: prometheus-config
+      target: /etc/prometheus.yml
 
  
   grafana:
@@ -96,7 +97,7 @@ networks:
   monitoring:
     driver: overlay
     
-
-secrets:
-  prometheus: 
-    external: true
+configs:
+  prometheus-config: 
+    file: ./prometheus-config.yml
+    

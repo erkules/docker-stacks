@@ -2,4 +2,7 @@
 
 ## Prometheus
 
-bash deploy-prometheus-stack.sh
+~~~
+docker stack deploy -c prometheus-stack.yml prometheus
+~~~
+
