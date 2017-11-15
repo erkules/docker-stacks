@@ -14,7 +14,7 @@ services:
     networks:
       - public
     deploy:
-      replicas: 3
+      mode: global
       placement:
         constraints: [node.role == manager]		                                                   
       restart_policy:
@@ -43,6 +43,9 @@ services:
     image: erkules/nginxhostname:v2
     deploy:
       replicas: 1
+      update_config:
+        parallelism: 2
+        failure_action: rollback
       labels:
       - "traefik.backend=www1"
       - "traefik.port=80"
