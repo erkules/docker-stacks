@@ -13,7 +13,7 @@ services:
           cpus:   '0.10'
           memory: '32M'
     image: prom/node-exporter:0.12.0
-    command: -collector.procfs /host/proc -collector.sysfs /host/sys --collector.textfile.directory /etc/node-exporter/ --collectors.enabled "conntrack,diskstats,entropy,filefd,filesystem,loadavg,mdadm,meminfo,netdev,netstat,stat,textfile,time,vmstat,ipvs" -collector.filesystem.ignored-mount-points '^/(sys|proc|dev|host|etc)($$|/)'
+    command: -collector.procfs /host/proc -collector.sysfs /host/sys  /etc/node-exporter/ --collectors.enabled "conntrack,diskstats,entropy,filefd,filesystem,loadavg,mdadm,meminfo,netdev,netstat,stat,time,vmstat,ipvs" -collector.filesystem.ignored-mount-points '^/(sys|proc|dev|host|etc)($$|/)'
     volumes:
     - /proc:/host/proc 
     - /sys:/host/sys 
