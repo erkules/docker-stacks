@@ -1,0 +1,38 @@
+version: "3.3"
+services:
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:${ELASTIC_VERSION:-6.0.0}
+    command:
+    - --path.config
+    - /etc/filebeat.yml
+    user: root
+    networks:
+      - elastic
+    configs:
+      - source: fb-config
+        target: /etc/filebeat.yml
+    volumes:
+      - /var/log/audit/:/var/log/audit/:ro
+    command: ["--strict.perms=false"]
+    deploy:
+      mode: global
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-platinum:${ELASTIC_VERSION:-6.0.0}
+    environment:
+      - "discovery.type=single-node"
+    networks:
+      - elastic
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION:-6.0.0}
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    networks:
+      - elastic
+networks:
+  elastic:
+configs:
+  fb-config:
+    file: ./filebeat.yml
+
