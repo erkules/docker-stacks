@@ -11,8 +11,6 @@ services:
     configs:
       - source: fb-config
         target: /etc/filebeat.yml
-    volumes:
-      - /var/log/audit/:/var/log/audit/:ro
     command: ["--strict.perms=false"]
     deploy:
       mode: global
@@ -20,6 +18,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch-platinum:${ELASTIC_VERSION:-6.0.0}
     environment:
       - "discovery.type=single-node"
+      - "xpack.security.enabled=false"
     networks:
       - elastic
   kibana:
