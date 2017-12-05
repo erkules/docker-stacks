@@ -2,15 +2,14 @@ version: "3.3"
 services:
   filebeat:
     image: docker.elastic.co/beats/filebeat:${ELASTIC_VERSION:-6.0.0}
-    command:
-    - --path.config
-    - /etc/filebeat.yml
     user: root
     networks:
       - elastic
     configs:
       - source: fb-config
-        target: /etc/filebeat.yml
+        target: /usr/share/filebeat/filebeat.yml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     command: ["--strict.perms=false"]
     deploy:
       mode: global
