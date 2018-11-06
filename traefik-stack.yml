@@ -2,7 +2,7 @@ version: "3"
 
 services:
   traefik:
-    image: traefik:v1.2.0
+    image: traefik:v1.7.4
     command: --web --docker --docker.swarmmode --docker.watch --docker.domain=traefik --logLevel=DEBUG
     ports:
       - "80:80"
