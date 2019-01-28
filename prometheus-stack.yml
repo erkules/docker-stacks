@@ -12,7 +12,7 @@ services:
         limits:
           cpus:   '0.10'
           memory: '32M'
-    image: prom/node-exporter:v0.13.0
+    image: prom/node-exporter:v0.17.0
     command: -collector.procfs /host/proc -collector.sysfs /host/sys  /etc/node-exporter/ --collectors.enabled "conntrack,diskstats,entropy,filefd,filesystem,loadavg,mdadm,meminfo,netdev,netstat,stat,time,vmstat,ipvs" -collector.filesystem.ignored-mount-points '^/(sys|proc|dev|host|etc)($$|/)'
     volumes:
     - /proc:/host/proc 
@@ -48,7 +48,7 @@ services:
     - monitoring
 
   prometheus:
-    image: prom/prometheus:v1.8.2
+    image: prom/prometheus:v2.7.0
     command: -config.file=/etc/prometheus.yml -storage.local.path=/prometheus 
     deploy:
       mode: replicated
@@ -74,7 +74,7 @@ services:
 
  
   grafana:
-    image: basi/grafana:v4.1.1
+    image: basi/grafana:v4.6.2
     ports:
       - "3000:3000"
     networks:
