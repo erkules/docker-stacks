@@ -14,6 +14,11 @@ scrape_configs:
   - names: ['tasks.cadvisor']
     type: 'A'
     port: 8080
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - "alertmanager:9093:
 
 rule_files:
 - /run/secrets/rules
