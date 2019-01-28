@@ -74,7 +74,7 @@ services:
 
  
   grafana:
-    image: basi/grafana:v4.6.2
+    image: basi/grafana:4.6.2
     ports:
       - "3000:3000"
     networks:
