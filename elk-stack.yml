@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   filebeat:
-    image: docker.elastic.co/beats/filebeat:${ELASTIC_VERSION:-6.0.0}
+    image: docker.elastic.co/beats/filebeat:6.5.4
     user: root
     networks:
       - elastic
@@ -15,14 +15,14 @@ services:
     deploy:
       mode: global
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-platinum:${ELASTIC_VERSION:-6.0.0}
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
     environment:
       - "discovery.type=single-node"
       - "xpack.security.enabled=false"
     networks:
       - elastic
   kibana:
-    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION:-6.0.0}
+    image: docker.elastic.co/kibana/kibana:6.5.4
     ports:
       - "5601:5601"
     environment:
