@@ -13,12 +13,12 @@ services:
           cpus:   '0.10'
           memory: '32M'
     image: prom/node-exporter:v0.17.0
-    command: -collector.procfs /host/proc -collector.sysfs /host/sys  /etc/node-exporter/ --collectors.enabled "conntrack,diskstats,entropy,filefd,filesystem,loadavg,mdadm,meminfo,netdev,netstat,stat,time,vmstat,ipvs" -collector.filesystem.ignored-mount-points '^/(sys|proc|dev|host|etc)($$|/)'
+    command: --path.procfs /host/proc --path.sysfs /host/sys
     volumes:
-    - /proc:/host/proc 
-    - /sys:/host/sys 
-    - /:/rootfs 
-    - /etc/hostname:/etc/host_hostname 
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    - /:/rootfs:ro
+    - /etc/hostname:/etc/host_hostname:ro
     environment:
     - HOST_HOSTNAME=/etc/host_hostname
     networks:
@@ -41,7 +41,7 @@ services:
     image: google/cadvisor
     volumes:
     - /:/rootfs:ro
-    - /var/run:/var/run
+    - /var/run:/var/run:ro
     - /sys:/sys:ro
     - /var/lib/docker:/var/lib/docker:ro
     networks:
@@ -49,7 +49,7 @@ services:
 
   prometheus:
     image: prom/prometheus:v2.7.0
-    command: -config.file=/etc/prometheus.yml -storage.local.path=/prometheus 
+    command: --config.file=/etc/prometheus.yml --storage.tsdb.path=/prometheus
     deploy:
       mode: replicated
       replicas: 1
