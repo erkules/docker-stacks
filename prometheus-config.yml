@@ -21,4 +21,4 @@ alerting:
       - "alertmanager:9093"
 
 rule_files:
-- /run/secrets/rules
+- /etc/prometheus-rules.yml

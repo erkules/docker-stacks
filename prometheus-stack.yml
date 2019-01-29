@@ -94,6 +94,8 @@ services:
     configs:
     - source: prometheus-config
       target: /etc/prometheus.yml
+    - source: alerting-rules
+      target: /etc/prometheus-rules.yml
 
  
   grafana:
@@ -123,4 +125,8 @@ networks:
 configs:
   prometheus-config: 
     file: ./prometheus-config.yml
+    name: name${VERSION}
+  alerting-rules: 
+    file: ./prometheus-rules.yml
+    name: alerts${VERSION}
     
