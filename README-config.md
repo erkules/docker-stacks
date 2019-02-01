@@ -16,3 +16,5 @@ configs:
 ~~~
 
 Leider müssen wir dann vor dem `docker stack deploy` VERSION ändern (i.e. md5sum)
+Bitte darauf achten, nun --prune zu verwenden um die alten Configs zu löschen.
+
