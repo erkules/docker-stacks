@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 services:
   agent:
     image: portainer/agent
@@ -26,7 +26,7 @@ services:
       #    - -H
       #    - unix:///var/run/docker.sock
     -  -H 
-    - tcp://tasks.portainer_agent:9001
+    - tcp://tasks.agent:9001
     - --tlsskipverify
     ports:
     - 9080:9000
