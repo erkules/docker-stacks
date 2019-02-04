@@ -19,7 +19,7 @@ services:
       placement:
         constraints: [node.platform.os == linux]
   portainer:
-      image: portainer/portainer
+    image: portainer/portainer
     networks:
       - portainer_agent
     command:
