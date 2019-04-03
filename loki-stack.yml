@@ -16,6 +16,14 @@ services:
     image: grafana/promtail:master
     deploy:
       mode: global
+      resources:
+        reservations:
+          cpus:   '0.10'
+          memory: '16M'
+        limits:
+          cpus:   '0.10'
+          memory: '32M'
+
     volumes:
       - /var/log:/var/log
       - /var/lib/docker/containers:/var/lib/docker/containers
