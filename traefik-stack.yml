@@ -23,9 +23,9 @@ services:
     image: erkules/nginxhostname
     deploy:
       labels:
+      - "traefik.frontend.rule=Host:www1.docker.localhost"
       - "traefik.backend=www1"
       - "traefik.port=80"
-      - "traefik.frontend.rule=Host:www1.docker.localhost"
     networks:
       - public
 
@@ -34,9 +34,9 @@ services:
     deploy:
       replicas: 1
       labels:
+      - "traefik.frontend.rule=Host:testing.docker.localhost"
       - "traefik.backend=testing"
       - "traefik.port=80"
-      - "traefik.frontend.rule=Host:testing.docker.localhost"
     networks:
       - public
   www2:
@@ -47,9 +47,9 @@ services:
         parallelism: 2
         failure_action: rollback
       labels:
+      - "traefik.frontend.rule=Host:www1.docker.localhost"
       - "traefik.backend=www1"
       - "traefik.port=80"
-      - "traefik.frontend.rule=Host:www1.docker.localhost"
     networks:
       - public
  
@@ -58,10 +58,10 @@ services:
     deploy:
       replicas: 3
       labels:
+      - "traefik.backend.loadbalancer.stickiness=true"
       - "traefik.backend=www3"
       - "traefik.port=80"
       - "traefik.frontend.rule=Host:www3.docker.localhost"
-      - "traefik.backend.loadbalancer.sticky=true"
     networks:
       - public
 
