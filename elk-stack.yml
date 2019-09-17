@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   filebeat:
-    image: docker.elastic.co/beats/filebeat:6.5.4
+    image: docker.elastic.co/beats/filebeat:7.3.2
     user: root
     networks:
       - elastic
@@ -15,23 +15,24 @@ services:
     deploy:
       mode: global
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.2
     environment:
       - "discovery.type=single-node"
       - "xpack.security.enabled=false"
     networks:
       - elastic
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.5.4
+    image: docker.elastic.co/kibana/kibana:7.3.2
     ports:
       - "5601:5601"
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     networks:
       - elastic
 networks:
   elastic:
 configs:
   fb-config:
-    file: ./filebeat.yml
+    file: ./filebeat.conf
 
