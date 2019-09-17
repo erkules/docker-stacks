@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:11.10.4-ce.0
+    environment:
+      GITLAB_OMNIBUS_CONFIGS: |
+        external_url 'haha.de'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        gitlab_rails['registry_enabled'] = false
+        registry_external_url '${REGISTRY_URL}'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '2222:22'
+    volumes:
+      - gitlab-conf:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+    networks:
+      - net
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  net:
+    driver: overlay
+
+volumes:
+  gitlab-conf:
+  gitlab-logs:
+  gitlab-data:

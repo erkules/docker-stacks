@@ -1,0 +1,16 @@
+concurrent = 1
+check_interval = 0
+
+[[runners]]
+  name = "runner"
+  url = "http://gitlab"
+  token = "XXXXXX"
+  executor = "docker"
+  [runners.docker]
+    tls_verify = false
+    image = "docker"
+    privileged = true
+    disable_cache = false
+    volumes = ["/cache"]
+    shm_size = 0
+  [runners.cache]
