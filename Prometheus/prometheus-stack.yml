@@ -12,7 +12,7 @@ services:
         limits:
           cpus:   '0.10'
           memory: '32M'
-    image: prom/node-exporter:v0.17.0
+    image: prom/node-exporter:v0.18.1
     command: --path.procfs /host/proc --path.sysfs /host/sys
     volumes:
     - /proc:/host/proc:ro
@@ -33,23 +33,27 @@ services:
         condition: on-failure
       resources:
         reservations:
-          cpus:   '0.10'
+          cpus:   '0.20'
           memory: '64M'
         limits:
-          cpus:   '0.10'
-          memory: '128M'
-    image: google/cadvisor
+          cpus:   '0.20'
+          memory: '256M'
+    image: gcr.io/google-containers/cadvisor 
+    healthcheck:
+      disable: true
+
     volumes:
     - /:/rootfs:ro
     - /var/run:/var/run:ro
     - /sys:/sys:ro
     - /var/lib/docker:/var/lib/docker:ro
+    - /dev/disk:/dev/disk:ro
     networks:
     - monitoring
 
 
   alertmanager:
-    image: prom/alertmanager:v0.9.1
+    image: prom/alertmanager:v0.20.0
     deploy:
       mode: replicated
       replicas: 1
@@ -71,7 +75,7 @@ services:
 
  
   prometheus:
-    image: prom/prometheus:v2.7.0
+    image: prom/prometheus:v2.15.2
     command: --config.file=/etc/prometheus.yml --storage.tsdb.path=/prometheus
     deploy:
       mode: replicated
@@ -99,7 +103,8 @@ services:
 
  
   grafana:
-    image: basi/grafana:4.6.2
+    image: grafana/grafana:master
+    #image: basi/grafana:4.6.2
     ports:
       - "3000:3000"
     networks:
@@ -118,6 +123,35 @@ services:
           cpus: '0.50'
           memory: 32M
  
+  loki:
+    image: grafana/loki:master
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - monitoring
+
+  promtail:
+    image: grafana/promtail:master
+    deploy:
+      mode: global
+      resources:
+        reservations:
+          cpus:   '0.10'
+          memory: '16M'
+        limits:
+          cpus:   '0.10'
+          memory: '32M'
+    volumes:
+      - /var/log:/var/log
+      - /var/lib/docker/containers:/var/lib/docker/containers
+    command: -config.file=/etc/promtail/docker-config.yaml
+    configs:
+    - source: promtail-config
+      target: /etc/promtail/docker-config.yaml
+    networks:
+      - monitoring
+
 networks:
   monitoring:
     driver: overlay
@@ -129,4 +163,8 @@ configs:
   alerting-rules: 
     file: ./prometheus-rules.yml
     name: alerts${VERSION}
+  promtail-config:
+    file: ./promtail-config.yml
     
+
+
