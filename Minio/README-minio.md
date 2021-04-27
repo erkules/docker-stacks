@@ -16,10 +16,12 @@ des Plugins passen.
 ~~~
 docker plugin install rexray/s3fs \
   S3FS_OPTIONS="allow_other,use_path_request_style,nonempty,url=http://<MINOURL:PORT>" \
-  S3FS_ENDPOINT="http://<MINOURL:9000>" \
+  S3FS_ENDPOINT="http://<MINOURL>:9000" \
   S3FS_ACCESSKEY="EAKIAIOSFODNN7EXAMPLE" \
   S3FS_SECRETKEY="EwJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 ~~~
+
+
 
 Volume erstellen:
 
