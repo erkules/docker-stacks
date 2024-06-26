@@ -1,5 +1,6 @@
 # Docker Swarm Mode Stacks
 
+Achtung TOT, weil docker swarm tot
 PoC only.
 
 ## Prometheus
