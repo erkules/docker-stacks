@@ -1,0 +1,8 @@
+#!/bin/sh
+echo Status: 200 OK
+echo Content-Type: text/plain
+echo
+echo
+echo Query an Datenbank
+echo 
+mysql -s -N -h db -u root -e 'SELECT name FROM app.int ORDER BY RAND() LIMIT 1;'
