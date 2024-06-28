@@ -15,6 +15,11 @@ services:
     environment:
     - "collect.perf_schema.eventsstatements"
     - "collect.perf_schema.eventsstatementssum"
+    - "collect.info_schema.clientstats"
+    - "collect.info_schema.processlist"
+    - "collect.info_schema.tables"
+    - "collect.info_schema.tables.databases"
+
     command:
     - "--mysqld.username=root"
     - "--mysqld.address=db:3306"
