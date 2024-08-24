@@ -1,0 +1,21 @@
+version: '3'
+services:
+  chowner:
+    image: alpine
+    command:  ["chown","1001:1001","/data"]
+    volumes:
+      - sqlite:/data
+    restart: no
+
+  dex:
+    depends_on:
+    - chowner
+    image: ghcr.io/dexidp/dex:v2.37.0
+    volumes:
+      - ./config.yaml:/etc/dex/config.yaml
+      - sqlite:/data
+    ports:
+      - "5556:5556"
+    command: ["dex", "serve", "/etc/dex/config.yaml"]
+volumes:
+  sqlite:

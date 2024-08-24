@@ -1,0 +1,31 @@
+issuer: http://localhost:5556/dex
+storage:
+  type: sqlite3
+  config:
+    file: /data/dex.db
+
+web:
+  http: 0.0.0.0:5556
+
+staticClients:
+  - id: example-app
+    redirectURIs:
+      - 'http://localhost:5555/callback'
+    name: 'Example App'
+    secret: example-app-secret
+
+enablePasswordDB: true
+
+staticPasswords:
+#password kumpel
+  - email: "erkan@linsenraum.de"
+    hash: "$2a$12$BnIxtux2dyn2id5pVhFxt.JmBe1AMLrE0FBSkJri3cmS6D4qy3gKa"
+    username: "erkan"
+    userID: "1001"
+  - email: "anja@linsenraum.de"
+    hash: "$2a$12$BnIxtux2dyn2id5pVhFxt.JmBe1AMLrE0FBSkJri3cmS6D4qy3gKa"
+    username: "anja"
+    userID: "1111"
+#connextors:
+#  - type: github
+#   ....
